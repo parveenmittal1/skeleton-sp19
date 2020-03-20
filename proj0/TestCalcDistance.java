@@ -2,6 +2,7 @@
 /**
  *  Tests calcDistance
  */
+import java.lang.Math;
 public class TestCalcDistance {
 
     /**
@@ -45,4 +46,6 @@ public class TestCalcDistance {
         checkEquals(b1.calcDistance(b2), 1.0, "calcDistance()", 0.01);
         checkEquals(b1.calcDistance(b3), 5.0, "calcDistance()", 0.01);
     }
+
+
 }

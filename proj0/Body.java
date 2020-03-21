@@ -74,4 +74,9 @@ public class Body{
         this.xxPos=this.xxPos+this.xxVel*t;
         return;
     }
+
+    public void draw(){
+        StdDraw.picture(this.xxPos,this.yyPos, this.imgFileName);
+        return;
+    }
 }

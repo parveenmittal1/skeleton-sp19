@@ -12,16 +12,16 @@ public class LinkedListDeque<t> implements Cs61b {
         }
     }
 
-    private ListNode sentinalNode;
+    private ListNode<Integer> sentinelNode;
     int size;
 
     public LinkedListDeque(){
-        sentinalNode=new ListNode(null,null,null);
+        sentinelNode =new ListNode(null,67,null);
     }
 
     public LinkedListDeque(t item){
-        sentinalNode=new ListNode(null,null,null);
-        sentinalNode.Last=new ListNode(sentinalNode,item,null);
+        sentinelNode =new ListNode(null,null,null);
+        sentinelNode.Last=new ListNode(sentinelNode,item,null);
     }
 
     private  ListNode helperDeep(ListNode src,ListNode ans){
@@ -36,7 +36,7 @@ public class LinkedListDeque<t> implements Cs61b {
     }
 
     public  LinkedListDeque(LinkedListDeque other){
-        sentinalNode.Last=helperDeep(other.sentinalNode.Last,sentinalNode.Last);
+        sentinelNode.Last=helperDeep(other.sentinelNode.Last, sentinelNode.Last);
     }
 
     private t helpIndex(int index, ListNode first){
@@ -50,14 +50,14 @@ public class LinkedListDeque<t> implements Cs61b {
         if(index==0){
             return (t) null;
         }
-        return (t) helpIndex(index,sentinalNode.Last);
+        return (t) helpIndex(index-1, sentinelNode.Last);
     }
 
     @Override
     public void addFirst(t item) {
         ListNode newNode=new ListNode(null,item,null);
-        ListNode temp=sentinalNode.Last;
-        sentinalNode.Last=newNode;
+        ListNode temp= sentinelNode.Last;
+        sentinelNode.Last=newNode;
         newNode.Last=temp;
         size++;
     }

@@ -17,6 +17,12 @@ import java.util.Map;
  */
 public class Plip extends Creature {
 
+
+    /**
+ * initialEnergy of the creature
+* */
+
+    private  double initialEnergy;
     /**
      * red color.
      */
@@ -39,7 +45,9 @@ public class Plip extends Creature {
         g = 0;
         b = 0;
         energy = e;
+        initialEnergy=e;
     }
+
 
     /**
      * creates a plip with energy equal to 1.
@@ -57,7 +65,9 @@ public class Plip extends Creature {
      * that you get this exactly correct.
      */
     public Color color() {
-        g = 63;
+        r=99;
+        g = Math.min((int)(96*this.energy)+63,255);
+        b=76;
         return color(r, g, b);
     }
 
@@ -74,7 +84,11 @@ public class Plip extends Creature {
      * private static final variable. This is not required for this lab.
      */
     public void move() {
-        // TODO
+        if(energy>0){
+        this.energy-=0.15;
+        return;
+    }
+        else energy=0;
     }
 
 
@@ -82,16 +96,20 @@ public class Plip extends Creature {
      * Plips gain 0.2 energy when staying due to photosynthesis.
      */
     public void stay() {
-        // TODO
+        if (initialEnergy > energy + 0.2) {
+            this.energy = energy + 0.2;
+        } else {
+            energy=initialEnergy;
+        }
     }
-
     /**
      * Plips and their offspring each get 50% of the energy, with none
      * lost to the process. Now that's efficiency! Returns a baby
      * Plip.
      */
     public Plip replicate() {
-        return this;
+        this.energy=energy/2;
+        return new Plip(this.energy/2);
     }
 
     /**

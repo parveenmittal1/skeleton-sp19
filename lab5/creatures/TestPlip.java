@@ -32,7 +32,12 @@ public class TestPlip {
 
     @Test
     public void testReplicate() {
-        // TODO
+        Plip p =new Plip(4);
+        assertEquals(4, p.energy(), 0.01);
+        assertEquals(new Color(99, Math.min((int)(96*p.energy()+63),255), 76), p.color());
+        Plip temp=p.replicate();
+        assertEquals(2, p.energy(), 0.01);
+        assertEquals(false,p==temp);
     }
 
     //@Test

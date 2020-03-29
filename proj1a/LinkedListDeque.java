@@ -1,6 +1,8 @@
-public class LinkedListDeque<t> implements Cs61b {
+import org.w3c.dom.NodeList;
 
-    private class ListNode<T>{
+public class LinkedListDeque<T> implements Cs61b<T> {
+
+    private class ListNode{
         T value;
         ListNode first;
         ListNode Last;
@@ -12,17 +14,25 @@ public class LinkedListDeque<t> implements Cs61b {
         }
     }
 
-    private ListNode<Integer> sentinelNode;
-    int size;
+
+
+    private ListNode sentinelNode;
+    private int size;
+
+
 
     public LinkedListDeque(){
-        sentinelNode =new ListNode(null,67,null);
+        sentinelNode =new ListNode(null,null,null);
+        size=0;
     }
-
-    public LinkedListDeque(t item){
+    public LinkedListDeque(T item){
         sentinelNode =new ListNode(null,null,null);
         sentinelNode.Last=new ListNode(sentinelNode,item,null);
+        size=1;
+
     }
+
+
 
     private  ListNode helperDeep(ListNode src,ListNode ans){
         if(src==null){
@@ -32,69 +42,92 @@ public class LinkedListDeque<t> implements Cs61b {
         ans =new ListNode(null,temp.value,null);
         ans.Last=helperDeep(temp.Last,ans.Last);
         return ans;
-
     }
 
     public  LinkedListDeque(LinkedListDeque other){
         sentinelNode.Last=helperDeep(other.sentinelNode.Last, sentinelNode.Last);
     }
 
-    private t helpIndex(int index, ListNode first){
+
+
+
+    private T helpIndex(int index, ListNode first){
         if(index==0){
-            return (t) first.value;
+            return  first.value;
         }
-        return (t) helpIndex(index-1,first.Last);
+        return helpIndex(index-1,first.Last);
+    }
+    public T getRecursive(int index){
+        if(index==0){
+            return  null;
+        }
+        return helpIndex(index-1, sentinelNode.Last);
     }
 
-    public t getRecursive(int index){
-        if(index==0){
-            return (t) null;
-        }
-        return (t) helpIndex(index-1, sentinelNode.Last);
-    }
 
-    @Override
-    public void addFirst(t item) {
-        ListNode newNode=new ListNode(null,item,null);
-        ListNode temp= sentinelNode.Last;
-        sentinelNode.Last=newNode;
-        newNode.Last=temp;
+
+
+    public void addFirst(T item) {
+        sentinelNode.Last=new ListNode(sentinelNode,item,sentinelNode.Last);
         size++;
     }
 
-    @Override
-    public void addLast(Object item) {
 
+    public void addLast(T item) {
+        size = size + 1;
+        ListNode p = sentinelNode;
+        /* Advance p to the end of the list. */
+        while (p.Last != null) {
+            p = p.first;
+        }
+        p.first = new ListNode(p,item,null);
+        size++;
     }
 
-    @Override
     public boolean isEmpty() {
-        return false;
+        return size==0;
     }
 
-    @Override
     public int size() {
-        return 0;
+        return size;
     }
 
-    @Override
     public void printDeque() {
-
+        ListNode temp=sentinelNode;
+        while (temp.Last!=null){
+            System.out.print(sentinelNode.Last.value+" ");
+            temp=temp.Last;
+        }
     }
 
-    @Override
-    public Object removeFirst() {
-        return null;
+    public T removeFirst() {
+        ListNode temp=sentinelNode.Last;
+        sentinelNode.Last=temp.Last;
+        return temp.value;
     }
 
-    @Override
-    public Object removeLast() {
-        return null;
+    public T removeLast() {
+        ListNode temp=sentinelNode;
+        while (temp.Last!=null){
+           // System.out.print(sentinelNode.Last.value+" ");
+            temp=temp.Last;
+        }
+        ListNode temp2=temp;
+        temp.first.Last=null;
+        return temp2.value;
     }
 
-    @Override
-    public Object get(int index) {
-        return null;
+    public T get(int index) {
+        if(index==0){
+            return null;
+        }
+        return helperGet(index,sentinelNode.Last);
     }
 
+    private T helperGet(int index, ListNode last) {
+        if(index==1){
+            return last.value;
+        }
+        return helperGet(index-1,last.Last);
+    }
 }

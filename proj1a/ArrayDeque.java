@@ -1,50 +1,54 @@
-public class ArrayDeque implements Cs61b {
-    public ArrayDeque(){
+public class ArrayDeque<T> implements Cs61b<T> {
+    private T[] array;
+    int size;
 
-
-    }
-    public ArrayDeque ArrayDeque(ArrayDeque other){
-        return other;
-    }
-
-
-    @Override
-    public void addFirst(Object item) {
-
+    public ArrayDeque() {
+        array =(T[]) new Object[10];
+        size=0;
     }
 
-    @Override
-    public void addLast(Object item) {
-
+    public void addFirst(T item) {
+        ///return T;
+        array[0]=item;
+        size++;
     }
 
-    @Override
+    private void resize(int capacity) {
+        T[] a = (T[]) new Object[capacity];
+        System.arraycopy(array, 0, a, 0, size);
+        array = a;
+    }
+    public void addLast(T item) {
+        if(size==array.length){
+            resize(size*2);
+        }
+        array[size]=item;
+        size++;
+    }
+
     public boolean isEmpty() {
-        return false;
+        return size==0;
     }
 
-    @Override
     public int size() {
-        return 0;
+        return size;
     }
 
-    @Override
-    public void printDeque() {
-
+    public T getLast() {
+        return array[size - 1];
     }
 
-    @Override
-    public Object removeFirst() {
+    public T removeFirst() {
         return null;
     }
 
-    @Override
-    public Object removeLast() {
-        return null;
+    public T removeLast() {
+        T x = getLast();
+        size = size - 1;
+        return x;
     }
 
-    @Override
-    public Object get(int index) {
-        return null;
+    public T get(int index) {
+        return array[index-1];
     }
 }

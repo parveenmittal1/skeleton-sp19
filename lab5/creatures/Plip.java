@@ -17,6 +17,8 @@ import java.util.Map;
  */
 public class Plip extends Creature {
 
+    private double moveProbability = .5;
+
 
     /**
  * initialEnergy of the creature
@@ -129,12 +131,32 @@ public class Plip extends Creature {
         // Rule 1
         Deque<Direction> emptyNeighbors = new ArrayDeque<>();
         boolean anyClorus = false;
-        // TODO
+
         // (Google: Enhanced for-loop over keys of NEIGHBORS?)
         // for () {...}
+        for (Direction entry : neighbors.keySet()) {
 
-        if (false) { // FIXME
-            // TODO
+                if (neighbors.get(entry.TOP).name().equals("empty") && this.energy() >= 1.0) {
+                    return new Action(Action.ActionType.REPLICATE, Direction.TOP);
+                } else if (neighbors.get(entry.BOTTOM).name().equals("empty") && this.energy() >= 1.0) {
+                    return new Action(Action.ActionType.REPLICATE, Direction.BOTTOM);
+                } else if (neighbors.get(entry.LEFT).name().equals("empty") && this.energy() >= 1.0) {
+                    return new Action(Action.ActionType.REPLICATE, Direction.LEFT);
+                } else if (neighbors.get(entry.RIGHT).name().equals("empty") && this.energy() >= 1.0) {
+                    return new Action(Action.ActionType.REPLICATE, Direction.RIGHT);
+
+                }else if ((neighbors.get(entry.RIGHT).name().equals("clours")||neighbors.get(entry.LEFT).name().equals("clours")|| neighbors.get(entry.BOTTOM).name().equals("clours"))&&  Math.random() < moveProbability) {
+                    return new Action(Action.ActionType.MOVE, Direction.TOP);
+                } else if ((neighbors.get(entry.RIGHT).name().equals("clours")||neighbors.get(entry.LEFT).name().equals("clours")|| neighbors.get(entry.TOP).name().equals("clours")) &&  Math.random() < moveProbability) {
+                    return new Action(Action.ActionType.MOVE, Direction.BOTTOM);
+                } else if ((neighbors.get(entry.RIGHT).name().equals("clours")||neighbors.get(entry.TOP).name().equals("clours")|| neighbors.get(entry.BOTTOM).name().equals("clours"))&&  Math.random() < moveProbability) {
+                    return new Action(Action.ActionType.MOVE, Direction.LEFT);
+                } else if ((neighbors.get(entry.TOP).name().equals("clours")||neighbors.get(entry.TOP).name().equals("clours")|| neighbors.get(entry.BOTTOM).name().equals("clours"))&&  Math.random() < moveProbability) {
+                    return new Action(Action.ActionType.MOVE, Direction.RIGHT);
+                }
+                else {
+                    return new Action(Action.ActionType.STAY);
+                }
         }
 
         // Rule 2

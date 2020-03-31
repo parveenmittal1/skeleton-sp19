@@ -40,7 +40,7 @@ public class TestPlip {
         assertEquals(false,p==temp);
     }
 
-    //@Test
+    @Test
     public void testChoose() {
 
         // No empty adjacent spaces; stay.
@@ -80,9 +80,9 @@ public class TestPlip {
         allEmpty.put(Direction.RIGHT, new Empty());
 
         actual = p.chooseAction(allEmpty);
-        Action unexpected = new Action(Action.ActionType.STAY);
+       // Action expected2 = new Action(Action.ActionType.STAY);
 
-        assertNotEquals(unexpected, actual);
+        assertEquals(expected, actual);
 
 
         // Energy < 1; stay.

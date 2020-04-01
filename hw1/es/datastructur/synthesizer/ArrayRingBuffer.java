@@ -1,4 +1,8 @@
 package es.datastructur.synthesizer;
+import com.sun.javafx.scene.control.ReadOnlyUnbackedObservableList;
+import com.sun.xml.internal.fastinfoset.stax.events.ReadIterator;
+import edu.princeton.cs.algs4.In;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Objects;
@@ -8,36 +12,29 @@ import java.util.Objects;
 // Make sure to make this class implement BoundedQueue<T>
 
 public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
-    /* Index for the next dequeue or peek. */
-    private int first;
-    /* Index for the next enqueue. */
+    private T[] array;
+    private int front;
     private int last;
-    /* Variable for the fillCount. */
-    private int fillCount;
-    /* Array for storing the buffer data. */
-    private T[] rb;
+    private int size;
 
     /**
      * Create a new ArrayRingBuffer with the given capacity.
      */
     public ArrayRingBuffer(int capacity) {
-        rb=(T[]) new Object[capacity];
-        // Create new array with capacity elements.
-        //       first, last, and fillCount should all be set to 0.
-        first=0;
-        last=0;
-        fillCount=0;
-
+        array =(T[]) new Object[2];
+        size=0;
+        front=-1;
+        last=-1;
     }
 
    // @Override
     public int capacity() {
-        return rb.length;
+        return array.length;
     }
 
     //@Override
     public int fillCount() {
-        return last-first;
+        return size;
     }
 
     /**
@@ -45,14 +42,18 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
      * throw new RuntimeException("Ring buffer overflow").
      */
     public void enqueue(T x) {
-        if(capacity()==fillCount()){
+        if(size==array.length){
             throw new RuntimeException("Ring buffer overflow");
         }
-        rb[fillCount()]=x;
-        last++;
-        //  Enqueue the item. Don't forget to increase fillCount and update
-        //       last.
-        return;
+        if (last < 0) {
+            front = 0;
+            last = 0;
+        }
+        if (last == array.length - 1) {
+            last = 0;
+        } else last++;
+        array[last] = x;
+        size++;
     }
 
     /**
@@ -60,13 +61,18 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
      * throw new RuntimeException("Ring buffer underflow").
      */
     public T dequeue() {
-        T temp=rb[first];
-        first++;
+        if(size==0){
+            throw new RuntimeException("Ring buffer underflow");
+        }
+        T temp=array[front];
+        if(front==array.length-1){
+            front=0;
+            size--;
+            return temp;
+        }
+        front++;
+        size--;
         return temp;
-
-        //  Dequeue the first item. Don't forget to decrease fillCount and
-        //       update first.
-       // return null;
     }
 
     /**
@@ -76,18 +82,23 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
     public T peek() {
         // Return the first item. None of your instance variables should
         //       change.
-        return rb[first];
+        if(size==0){
+           // Double a=0.345;
+           // return (T)a;
+            throw new ArrayIndexOutOfBoundsException("size is zero");
+        }
+        return array[front];
     }
     public Iterator<T> iterator(){
 
-        return null ;
+        return new RingIterator();
     }
 
     private class RingIterator implements Iterator{
 
         @Override
         public boolean hasNext() {
-            return fillCount>0;
+            return size>0;
         }
 
         @Override
@@ -101,21 +112,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T>  {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ArrayRingBuffer<?> that = (ArrayRingBuffer<?>) o;
-        return first == that.first &&
+        return front == that.front &&
                 last == that.last &&
-                fillCount == that.fillCount &&
-                Arrays.equals(rb, that.rb);
+                size == that.size&&
+                Arrays.equals(array, that.array);
     }
-
-    @Override
-    public int hashCode() {
-        int result = Objects.hash(first, last, fillCount);
-        result = 31 * result + Arrays.hashCode(rb);
-        return result;
-    }
-
-
-    // When you get to part 4, implement the needed code to support
-    //       iteration and equals.
 }
-    // Remove all comments that say  when you're done.

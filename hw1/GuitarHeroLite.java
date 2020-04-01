@@ -13,7 +13,8 @@ public class GuitarHeroLite {
         while (true) {
 
             /* check if the user has typed a key; if so, process it */
-            if (StdDraw.hasNextKeyTyped()) {
+            boolean a=StdDraw.hasNextKeyTyped();
+            if (a) {
                 char key = StdDraw.nextKeyTyped();
                 if (key == 'a') {
                     stringA.pluck();
@@ -23,6 +24,9 @@ public class GuitarHeroLite {
             }
 
         /* compute the superposition of samples */
+           // stringC.pluck();
+         //   stringA.pluck();
+
             double sample = stringA.sample() + stringC.sample();
 
         /* play the sample on standard audio */

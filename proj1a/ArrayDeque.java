@@ -106,6 +106,11 @@ public class ArrayDeque<T> implements Cs61b<T> {
         }
         T x = array[last];
         size = size - 1;
+
+        if(last==0){
+            last=array.length-1;
+            return x;
+        }
         last--;
         return x;
     }
